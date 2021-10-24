@@ -1,12 +1,15 @@
 #!/bin/bash
 
-. ./VARIABLES.sh
+. ./VARIABLES
 
 echo "Unmounting product.img"
-umount $MountPointProduct
+umount $MountPointSystem/product
 
 echo "Unmounting system_ext.img"
-umount $MountPointSystemExt
+umount $MountPointSystem/system_ext
+
+echo "Unmounting vendor.img"
+umount $MountPointSystem/vendor
 
 echo "Unmounting system.img"
 umount $MountPointSystem
