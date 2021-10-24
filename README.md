@@ -104,7 +104,7 @@ We have checked availability of updates and requested installation of two packag
 
 ## Prepare folder structure
 
-For the sake of simplicity, create a folder in the root of C Drive, so you will have `C:\WSA\`. You may use other location if you would like, be sure to adjust commands below for new location.
+Select Platform: x86_64 if Windows architecture is x64, otherwise choose ARM64, Android: 11 and Variant: Pico (or Nano) on [OpenGApps](https://opengapps.org/)
 
 **Attention!** The folder where you will place the files which we will be downloading is going to become an installation folder. **DO NOT** delete that folder!  
 **Attention!** At the time of last update for this README, attempt to run scripts if they are located in path that contains spaces (like "Zulu Storage" in `D:\Zulu Storage\WSA`) will result in an error. Be sure to use paths with no spaces as long as fix have not been implemented.
@@ -158,6 +158,9 @@ As we have used `C:\WSA`, you will be able to use Windows Explorer to move files
 ```bash
 cd /mnt/c/WSA
 git clone https://github.com/WSA-Community/WSAGAScript
+cd WSAGAScript/
+mv /mnt/path-to-extracted-msix/*.img images/
+cp /mnt/path-to-downloaded-gapps/*.zip gapps/
 ```
 Wait for the command to finish running.
 
@@ -195,7 +198,9 @@ sudo ./unmount_images.sh
 
 ## Copy the edited images
 
-After successful execution, you can now copy edited images from `C:\WSA\WSAGAScript\#IMAGES` back to `C:\WSA\MicrosoftCorporationII.WindowsSubsystemForAndroid_1.8.32822.0_neutral___8wekyb3d8bbwe\WsaPackage_1.8.32822.0_x64_Release-Nightly` (example, the folder from where you have taken the images).
+```
+cp images/*.img /mnt/path-to-extracted-msix/
+```
 
 ## Registering the edited Windows Subsystem for Android™️ Installation Package
 
