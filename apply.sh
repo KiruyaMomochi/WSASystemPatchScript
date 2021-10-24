@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./VARIABLES.sh
+. ./VARIABLES
 
 TARGET_PRODUCT="redfin"
 TARGET_DEVICE="redfin"

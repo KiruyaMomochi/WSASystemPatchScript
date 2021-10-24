@@ -33,7 +33,7 @@ sudo apt install unzip lzip
 
 ### Download gapps
 
-Select Platform: x86_64 if Windows architecture is x64, otherwise choose ARM64, Android: 11 and Variant: Pico on [OpenGApps](https://opengapps.org/)
+Select Platform: x86_64 if Windows architecture is x64, otherwise choose ARM64, Android: 11 and Variant: Pico (or Nano) on [OpenGApps](https://opengapps.org/)
 
 ### Extract msixbundle
 
@@ -46,27 +46,12 @@ For Ubuntu
 
 ```bash
 git clone https://github.com/WSA-Community/WSAGAScript
-cd WSAGAScript/\#IMAGES
-mv /mnt/path-to-extracted-msix/*.img .
-cd ../\#GAPPS
-cp /mnt/path-to-downloaded-gapps/*.zip .
+cd WSAGAScript/
+mv /mnt/path-to-extracted-msix/*.img images/
+cp /mnt/path-to-downloaded-gapps/*.zip gapps/
 ```
 
 Paths in WSL follow the same as windows after /mnt/ its just the drive letter then folder structure as normal. For example /mnt/c/Users would be the C:\Users folder
-
-### Edit scripts
-
-If you're using devices with ARM architecture (e.g., Qualcomm Snapdragon), please edit `VARIABLES.sh` and set the correct architecture.
-
-Set executable permission for the scripts:
-
-```bash
-cd ..
-chmod +x extract_gapps_pico.sh
-chmod +x extend_and_mount_images.sh
-chmod +x apply.sh
-chmod +x unmount_images.sh
-```
 
 ### Run the scripts
 
@@ -81,9 +66,8 @@ sudo ./unmount_images.sh
 
 ### Copy the edited images
 
-```bash
-cd \#IMAGES
-cp *.img /mnt/path-to-extracted-msix/
+```
+cp images/*.img /mnt/path-to-extracted-msix/
 ```
 
 ### Register the edited WSA
