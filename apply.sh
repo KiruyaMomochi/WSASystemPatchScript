@@ -1,14 +1,14 @@
 #!/bin/bash
 
-. ./VARIABLES.sh
+. ./VARIABLES
 
 echo "Copying build.prop for each image"
-cp "$PropRoot/build_system_ext.prop" /mnt/system_ext/build.prop
-cp "$PropRoot/build_system.prop" /mnt/system/build.prop
-cp "$PropRoot/build_system.prop" /mnt/system/system/build.prop
-cp "$PropRoot/build_product.prop" /mnt/product/build.prop
-cp "$PropRoot/build_vendor.prop" /mnt/vendor/build.prop
-cp "$PropRoot/build_vendor_odm.prop" /mnt/vendor/odm/etc/vendor.prop
+cp "$PropRoot/build_system_ext.prop" "$MountPointSystem/system_ext/build.prop"
+cp "$PropRoot/build_system.prop" "$MountPointSystem/build.prop"
+cp "$PropRoot/build_system.prop" "$MountPointSystem/system/build.prop"
+cp "$PropRoot/build_product.prop" "$MountPointSystem/product/build.prop"
+cp "$PropRoot/build_vendor.prop" "$MountPointSystem/vendor/build.prop"
+cp "$PropRoot/build_vendor_odm.prop" "$MountPointSystem/vendor/odm/etc/vendor.prop"
 
 printf 'removing duplicate apps from system\n'
 rm -Rf $InstallDir/apex/com.android.extservices/
