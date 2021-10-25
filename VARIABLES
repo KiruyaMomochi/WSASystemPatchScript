@@ -2,7 +2,11 @@
 
 Root="$(dirname "$(realpath "$0")")"
 
+# Your Windows architecture, x64 or arm64
+Architecture="x64"
+
 MiscRoot="$Root/misc"
+PropRoot="$MiscRoot/prop/$Architecture"
 
 GAppsRoot="$Root/gapps"
 GAppsOutputFolder="$GAppsRoot/output"
