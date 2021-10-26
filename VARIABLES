@@ -2,8 +2,8 @@
 
 Root="$(dirname "$(realpath "$0")")"
 
-# Your Windows architecture, x64 or arm64
-Architecture="x64"
+# Your architecture, x86_64 or arm64-v8a
+Architecture="x86_64"
 
 MiscRoot="$Root/misc"
 PropRoot="$MiscRoot/prop/$Architecture"
