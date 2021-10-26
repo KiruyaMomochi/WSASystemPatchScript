@@ -39,12 +39,12 @@ echo "Mounting system"
 mount $ImagesRoot/system.img $MountPointSystem
 
 echo "Mounting product"
-mount $ImagesRoot/product.img $MountPointSystem/product
+mount $ImagesRoot/product.img $MountPointProduct
 
 echo "Mounting system_ext"
-mount $ImagesRoot/system_ext.img $MountPointSystem/system_ext
+mount $ImagesRoot/system_ext.img $MountPointSystemExt
 
 echo "Mounting vendor"
-mount $ImagesRoot/vendor.img $MountPointSystem/vendor
+mount $ImagesRoot/vendor.img $MountPointVendor
 
 echo "!! Images mounted !!"
