@@ -16,3 +16,5 @@ for file in lib*.so; do
   mv "$file" "${file:3:${#file}-6}"
 done
 popd >> /dev/null
+
+echo "!! Magisk folder ready !!"
