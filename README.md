@@ -38,7 +38,11 @@ As a temporary measure and additional information (especially if README remains 
 
 </p>
 
-*Click on the image to see the video*
+OpenGapps.zip -> /gapps
+\*.img -> /images
+magisk32  magisk64  magiskpolicy app-debug.apk -> /magisk
+
+### THIS IS FOR TESTING
 
 # Installation procedure
 
@@ -192,7 +196,7 @@ Make sure you're in the same directory as in the step before, the run:
 ```bash
 ./extract_gapps_pico.sh
 sudo ./extend_and_mount_images.sh
-sudo ./apply.sh
+sudo ./apply_gapps.sh
 sudo ./unmount_images.sh
 ```
 
