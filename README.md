@@ -38,9 +38,13 @@ As a temporary measure and additional information (especially if README remains 
 
 </p>
 
+Build Magisk with patch https://github.com/LSPosed/Magisk/tree/ub and https://github.com/LSPosed/Magisk/tree/flicker.
+
+```
 OpenGapps.zip -> /gapps
-\*.img -> /images
-magisk32  magisk64  magiskpolicy app-debug.apk -> /magisk
+*.img -> /images
+magisk32 magisk64 magiskpolicy app-debug.apk -> /magisk
+```
 
 ### THIS IS FOR TESTING
 
