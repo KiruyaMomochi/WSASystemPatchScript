@@ -3,13 +3,13 @@
 . ./VARIABLES
 
 echo "Unmounting product.img"
-umount $MountPointSystem/product
+umount $MountPointProduct
 
 echo "Unmounting system_ext.img"
-umount $MountPointSystem/system_ext
+umount $MountPointSystemExt
 
 echo "Unmounting vendor.img"
-umount $MountPointSystem/vendor
+umount $MountPointVendor
 
 echo "Unmounting system.img"
 umount $MountPointSystem
