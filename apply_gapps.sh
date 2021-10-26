@@ -98,13 +98,6 @@ find $MountPointProduct/overlay -type f -exec chcon --reference=$MountPointVendo
 find $MountPointProduct/priv-app -type f -exec chcon --reference=$MountPointProduct/priv-app/amazon-adm-release/amazon-adm-release.apk {} \;
 
 echo "Applying SELinux policy"
-# Sed will remove the SELinux policy for plat_sepolicy.cil, preserve policy using cp
-cp $InstallDir/etc/selinux/plat_sepolicy.cil $InstallDir/etc/selinux/plat_sepolicy_new.cil
-sed -i 's/(allow gmscore_app self (process (ptrace)))/(allow gmscore_app self (process (ptrace)))\n(allow gmscore_app self (vsock_socket (read write create connect)))\n(allow gmscore_app device_config_runtime_native_boot_prop (file (read)))/g' $InstallDir/etc/selinux/plat_sepolicy_new.cil
-cp $InstallDir/etc/selinux/plat_sepolicy_new.cil $InstallDir/etc/selinux/plat_sepolicy.cil
-rm $InstallDir/etc/selinux/plat_sepolicy_new.cil
-
-# Prevent android from using cached SELinux policy
-echo '0000000000000000000000000000000000000000000000000000000000000000' > $InstallDir/etc/selinux/plat_sepolicy_and_mapping.sha256
+$MagiskRoot/magiskpolicy --load $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --save $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy "allow gmscore_app gmscore_app vsock_socket { create connect write read }" "allow gmscore_app device_config_runtime_native_boot_prop file read"
 
 echo "!! Apply completed !!"
