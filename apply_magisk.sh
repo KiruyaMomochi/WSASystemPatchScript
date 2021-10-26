@@ -61,9 +61,6 @@ grep -q "magisk" "$VENDOR_FILE_CONTEXTS" || cat >> "$VENDOR_FILE_CONTEXTS" << EO
 /dev/wsa-magisk(/.*)? u:object_r:magisk_file:s0
 EOF
 
-echo "Applying magisk policies"
-$MagiskRoot/magiskpolicy --load $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --save $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --magisk "allow * magisk_file lnk_file *"
-
 echo "Setting permissions"
 chmod 0700 $MountPointSystem/sbin
 chmod 0755 $MountPointSystem/sbin/*
@@ -71,6 +68,11 @@ chmod 0755 $MountPointSystem/sbin/*
 echo "Applying root file ownership"
 chown -R root:root $MountPointSystem/sbin
 
-echo "Applying SELinux policy"
+echo "Applying SELinux security contexts"
 chcon u:object_r:rootfs:s0 $MountPointSystem/sbin
 chcon u:object_r:system_file:s0 $MountPointSystem/sbin/*
+
+echo "Applying magisk policies"
+$MagiskRoot/magiskpolicy --load $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --save $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --magisk "allow * magisk_file lnk_file *"
+
+echo "!! Magisk apply completed !!"

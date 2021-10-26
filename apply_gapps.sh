@@ -156,4 +156,4 @@ chcon --reference=$MountPointVendor/etc $MountPointVendor/build.prop
 echo "Applying SELinux policy"
 $MagiskRoot/magiskpolicy --load $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy --save $MountPointSystem/vendor/etc/selinux/precompiled_sepolicy "allow gmscore_app gmscore_app vsock_socket { create connect write read }" "allow gmscore_app device_config_runtime_native_boot_prop file read"
 
-echo "!! Apply completed !!"
+echo "!! Gapps apply completed !!"
