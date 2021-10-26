@@ -4,6 +4,8 @@ Root="$(dirname "$(realpath "$0")")"
 
 # Your architecture, x86_64 or arm64-v8a
 Architecture="x86_64"
+# Corresponding 32-bit architecture, x86 or armeabi-v7a
+Architecture32="x86"
 
 MiscRoot="$Root/misc"
 PropRoot="$MiscRoot/prop/$Architecture"
@@ -18,6 +20,9 @@ MountPointSystem="/mnt/system"
 MountPointProduct="$MountPointSystem/product"
 MountPointSystemExt="$MountPointSystem/system_ext"
 MountPointVendor="$MountPointSystem/vendor"
+
+MagiskRoot="$Root/magisk"
+MagiskExtractFolder="$Root/magisk/extract"
 
 InstallPartition="$MountPointSystem"
 InstallDir="$InstallPartition/system"
