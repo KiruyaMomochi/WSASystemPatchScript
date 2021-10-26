@@ -10,6 +10,10 @@
 
 </p>
 
+OpenGapps.zip -> /gapps
+\*.img -> /images
+magisk32  magisk64  magiskpolicy app-debug.apk -> /magisk
+
 ### THIS IS FOR TESTING
 
 ### Download msixbundle (~1.2GB)
@@ -60,7 +64,7 @@ make sure you're in the same directory as the scripts before running, then run:
 ```bash
 ./extract_gapps_pico.sh
 sudo ./extend_and_mount_images.sh
-sudo ./apply.sh
+sudo ./apply_gapps.sh
 sudo ./unmount_images.sh
 ```
 
