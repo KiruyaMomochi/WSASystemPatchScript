@@ -2,10 +2,17 @@
 
 Root="$(dirname "$(realpath "$0")")"
 
-# Your architecture, x86_64 or arm64-v8a
+# Your wsa architecture, x86_64 or arm64-v8a
 Architecture="x86_64"
-# Corresponding 32-bit architecture, x86 or armeabi-v7a
-Architecture32="x86"
+# Your system architecture, x86, x86_64, armeabi-v7a or arm64-v8a
+# This is used to run executables in current environment
+SystemArchitecture="x86_64"
+
+if [ "$Architecture" = "x86_64" ]; then
+    Architecture32=x86
+    elif [ "$Architecture" = "arm64-v8a" ]; then
+    Architecture32=armeabi-v7a
+fi
 
 MiscRoot="$Root/misc"
 PropRoot="$MiscRoot/prop/$Architecture"
