@@ -1,0 +1,127 @@
+name: WSA Image Build
+
+on:
+  push:
+    branches: [github-actions]
+    paths:
+      - "gapps/**"
+      - "images/**"
+      - "magisk/**"
+      - "*.sh"
+      - ".github/workflows/build_wsa.yml"
+  pull_request:
+    branches: [github-actions]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build:
+    name: Build for ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        arch: [x86_64, arm64]
+    steps:
+      - name: Install lzip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lzip
+      - uses: actions/checkout@v2
+      - name: Download Magisk
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
+          # Required, if artifact is from a different repo
+          # Required, if repo is private a Personal Access Token with `repo` scope is needed
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          # Required, workflow file name or ID
+          workflow: build.yml
+          # Optional, the status or conclusion of a completed workflow to search for
+          # Can be one of a workflow conclusion:
+          #   "failure", "success", "neutral", "cancelled", "skipped", "timed_out", "action_required"
+          # Or a workflow status:
+          #   "completed", "in_progress", "queued"
+          workflow_conclusion: success
+          # Optional, will use the branch
+          branch: master
+          # Optional, defaults to all types
+          event: push
+          # Optional, directory where to extract artifact. Defaults to the artifact name (see `name` input)
+          path: magisk/
+          # Optional, defaults to current repo
+          repo: topjohnwu/Magisk
+          # Optional, check the workflow run whether it has an artifact
+          # then will get the last available artifact from previous workflow
+          # default false, just try to download from the last one
+          check_artifacts: false
+      - name: Move Magisk
+        run: |
+          Move-Item magisk/*/*.apk magisk/
+      - name: Download Gapps
+        run: |
+          $null = New-Item -ItemType Directory -Force -Path "gapps"
+          $list = Invoke-RestMethod -Uri "https://api.opengapps.org/list" -Method Get -Headers @{Accept="application/json"}
+          $arch = '${{ matrix.arch }}'
+          $version = '11.0'
+          $variant = 'nano'
+          $gapps = $list.archs.$arch.apis.$version.variants | Where-Object name -EQ $variant | Select-Object -First 1
+          Invoke-WebRequest -UserAgent 'curl' -Uri $gapps.zip -OutFile "gapps/gapps-$arch-$version-$variant.zip"
+      - name: Download images
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/KiruyaMomochi/wsa-tools/raw/main/wsa.psm1" -OutFile "wsa.psm1"
+          Import-Module ./wsa.psm1
+          $wsaProductId = '9p3395vx91nr';
+          $package = Get-StorePackageMetadata -ProductId $wsaProductId -Ring 'Slow' | Where-Object { $_.Name -ilike '*.msixbundle' } | Sort-Object -Descending Size | Select-Object -First 1
+          if (!((Test-Path $package.Name) -and (Get-FileHash -Algorithm SHA1 -Path $package.Name -ErrorAction SilentlyContinue).Hash -ieq $package.SHA1)) {
+            Write-Output "Downloading" ($package.Name)
+            Invoke-WebRequest -Uri $package.Url -OutFile bundle.msixbundle
+          }
+      - name: Extract images
+        run: |
+          $zip = [System.IO.Compression.ZipFile]::OpenRead((Resolve-Path '.\bundle.msixbundle'))
+          if ('${{ matrix.arch }}' -eq 'x86_64') {
+            $msix = $zip.Entries | Where-Object { $_.Name.Contains('x64_Release') }
+          } else {
+            $msix = $zip.Entries | Where-Object { $_.Name.Contains('ARM64_Release') }
+          }
+          $msix = $msix.Open()
+          $files = [System.IO.Compression.ZipArchive]::new($msix).Entries
+          $imgs = $files | Where-Object { $_.FullName -imatch '^[^/]+\.img$' }
+          $imgs | Foreach-Object {
+            $stream = $_.Open()
+            $file = [System.IO.File]::Create((Join-Path (Resolve-Path 'images') $_.Name))
+            $stream.CopyTo($file)
+            $stream.Close()
+          }
+          $msix.Close()
+      - name: Changing variables
+        run: |
+          if ('${{ matrix.arch }}' -eq 'arm64') {
+            [regex]::Replace(
+              (Get-Content ./VARIABLES -Raw), 
+              '^Architecture=".*?"$', 
+              'Architecture="arm64-v8a"', 
+              [System.Text.RegularExpressions.RegexOptions]::Multiline) | 
+              Set-Content ./VARIABLES
+          }
+      - name: Extract gapps
+        run: ./extract_gapps.sh
+      - name: Extract Magisk
+        run: ./extract_magisk.sh
+      - name: Extend and mount images
+        run: sudo ./extend_and_mount_images.sh
+      - name: Apply magisk
+        run: sudo ./apply_magisk.sh
+      - name: Apply gapps
+        run: sudo ./apply_gapps.sh
+      - name: Unmount images
+        run: sudo ./unmount_images.sh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Wsa-Images-Magisk-Gapps-${{ matrix.arch }}
+          path: images/*.img
