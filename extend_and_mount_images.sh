@@ -9,25 +9,25 @@ if [[ ! /proc/self/mounts -ef /etc/mtab ]]; then
 fi
 
 echo "chk product.img"
-e2fsck -f $ImagesRoot/product.img
+e2fsck -p -f $ImagesRoot/product.img
 
 echo "Resizing product.img"
 resize2fs $ImagesRoot/product.img 1024M
 
 echo "chk system.img"
-e2fsck -f $ImagesRoot/system.img
+e2fsck -p -f $ImagesRoot/system.img
 
 echo "Resizing system.img"
 resize2fs $ImagesRoot/system.img 1536M
 
 echo "chk system_ext.img"
-e2fsck -f $ImagesRoot/system_ext.img
+e2fsck -p -f $ImagesRoot/system_ext.img
 
 echo "Resizing system_ext.img"
 resize2fs $ImagesRoot/system_ext.img 108M
 
 echo "chk vendor.img"
-e2fsck -f $ImagesRoot/vendor.img
+e2fsck -p -f $ImagesRoot/vendor.img
 
 echo "Resizing vendor.img"
 resize2fs $ImagesRoot/vendor.img 300M
