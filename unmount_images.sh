@@ -14,9 +14,6 @@ umount $MountPointVendor
 echo "Unmounting system.img"
 umount $MountPointSystem
 
-echo "Unmounting vendor.img"
-umount $MountPointVendor
-
 echo "chk product.img"
 e2fsck -f $ImagesRoot/product.img
 
